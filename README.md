@@ -2,7 +2,7 @@
 
 <br/>
 
-# 🏗️ ERP Nexus — Fábrica de Bloques de Hormigón
+# ERP Nexus — Fábrica de Bloques de Hormigón
 
 **Sistema de gestión integral diseñado para optimizar los procesos productivos,  
 comerciales y operativos de una fábrica de bloques de hormigón.**
@@ -21,7 +21,7 @@ comerciales y operativos de una fábrica de bloques de hormigón.**
 
 ---
 
-## 📋 Tabla de Contenidos
+## Tabla de Contenidos
 
 - [Descripción](#-descripción)
 - [Módulos del Sistema](#-módulos-del-sistema)
@@ -34,7 +34,7 @@ comerciales y operativos de una fábrica de bloques de hormigón.**
 
 ---
 
-## 📖 Descripción
+## Descripción
 
 **ERP Nexus** es una aplicación web **full-stack** tipo ERP (Enterprise Resource Planning) construida con el **App Router de Next.js 16** y una arquitectura orientada a **Server Actions**. Permite gestionar de forma centralizada todos los procesos clave de una fábrica de bloques:
 
@@ -47,38 +47,38 @@ comerciales y operativos de una fábrica de bloques de hormigón.**
 
 ---
 
-## 🧩 Módulos del Sistema
+## Módulos del Sistema
 
-### 📊 Dashboard
+### Dashboard
 Panel principal con indicadores clave de rendimiento: producción del día, stock disponible, órdenes pendientes y alertas de stock mínimo.
 
-### 🏭 Producción
+### Producción
 Registro de lotes de producción por turno (mañana/tarde/noche). Vincula cada lote con:
 - Tipo de bloque y su formulación (cemento, arena, aditivos)
 - Operarios participantes con bloques producidos individuales
 - Cálculo automático de costo unitario por bloque
 
-### 🛒 Compras
+### Compras
 Gestión de proveedores y compras de materias primas. Actualiza automáticamente el stock y el precio promedio de cada material al registrar una compra.
 
-### 🚚 Venta y Despacho
+### Venta y Despacho
 Flujo completo de ventas:
 1. Creación de orden con líneas de productos (tipos de bloques + precios)
 2. Aprobación y despacho por un trabajador
 3. Registro de ticket de pesaje (peso bruto, tara, peso neto)
 
-### 📦 Inventario de Patio
+### Inventario de Patio
 Control del stock físico de bloques terminados en el patio. Permite ajustes manuales con registro de movimientos de entrada y salida.
 
-### 👥 Personal
+### Personal
 Administración del personal de planta: altas, bajas, posiciones y estado activo/inactivo.
 
-### ⚙️ Configuración General
+### Configuración General
 Gestión de los tipos de bloques producidos (dimensiones, nombre) y sus formulaciones de materias primas asociadas.
 
 ---
 
-## 🛠 Stack Tecnológico
+## Stack Tecnológico
 
 | Categoría | Tecnología |
 |---|---|
@@ -94,7 +94,7 @@ Gestión de los tipos de bloques producidos (dimensiones, nombre) y sus formulac
 
 ---
 
-## 🗄 Modelo de Datos
+## Modelo de Datos
 
 ```
 User ──────────── ProductionBatch ── BatchWorker ── Worker
@@ -112,7 +112,7 @@ RawMaterial ── RawMaterialPurchase ── Supplier
 
 ---
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerrequisitos
 - **Node.js** v18 o superior
@@ -155,7 +155,7 @@ La aplicación estará disponible en **[http://localhost:3000](http://localhost:
 
 ---
 
-## 📜 Scripts Disponibles
+## Scripts Disponibles
 
 | Comando | Descripción |
 |---|---|
@@ -167,7 +167,7 @@ La aplicación estará disponible en **[http://localhost:3000](http://localhost:
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 erp/
@@ -194,7 +194,7 @@ erp/
 
 ---
 
-## 🔐 Roles y Permisos
+## Roles y Permisos
 
 El sistema cuenta con autenticación basada en sesiones mediante **NextAuth.js**. Se define el rol del usuario en el modelo `User`:
 
