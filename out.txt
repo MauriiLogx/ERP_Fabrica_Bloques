@@ -1,0 +1,4 @@
+﻿
+> erp@0.1.0 seed
+> tsx prisma/seed.ts
+

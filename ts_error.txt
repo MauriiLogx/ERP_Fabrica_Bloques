@@ -1,0 +1,12 @@
+﻿src/app/(dashboard)/ventas/page.tsx(64,74): error TS2551: Property 'client' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'. Did you mean 'clientId'?
+src/app/(dashboard)/ventas/page.tsx(67,56): error TS2339: Property 'lines' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'.
+src/app/(dashboard)/ventas/page.tsx(67,66): error TS7006: Parameter 'l' implicitly has an 'any' type.
+src/app/(dashboard)/ventas/page.tsx(87,60): error TS2339: Property 'dispatch' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'.
+src/app/actions/ventas.ts(10,13): error TS2353: Object literal may only specify known properties, and 'lines' does not exist in type 'OrderInclude<DefaultArgs>'.
+src/app/actions/ventas.ts(50,13): error TS2353: Object literal may only specify known properties, and 'lines' does not exist in type 'Without<OrderCreateInput, OrderUncheckedCreateInput> & OrderUncheckedCreateInput'.
+src/app/actions/ventas.ts(78,20): error TS2353: Object literal may only specify known properties, and 'lines' does not exist in type 'OrderInclude<DefaultArgs>'.
+src/app/actions/ventas.ts(85,30): error TS2339: Property 'lines' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'.
+src/app/actions/ventas.ts(92,39): error TS2339: Property 'lines' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'.
+src/app/actions/ventas.ts(92,53): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+src/app/actions/ventas.ts(92,58): error TS7006: Parameter 'l' implicitly has an 'any' type.
+src/app/actions/ventas.ts(120,34): error TS2339: Property 'lines' does not exist on type '{ id: string; code: string; clientId: string; date: Date; status: string; totalAmount: number; createdById: string; }'.

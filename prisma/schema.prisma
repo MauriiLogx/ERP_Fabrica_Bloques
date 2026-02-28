@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  password_hash    String
+  role             String            @default("OPERARIO_APP")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  productionBatches ProductionBatch[]
+  clients          Client[]
+  orders           Order[]
+}
+
+model Worker {
+  id         String         @id @default(uuid())
+  firstName  String
+  lastName   String
+  dni        String         @unique
+  position   String
+  hireDate   DateTime       @default(now())
+  isActive   Boolean        @default(true)
+  batchWorkers BatchWorker[]
+  dispatches   Dispatch[]
+
+  @@index([dni])
+  @@index([isActive])
+}
+
+model BlockType {
+  id             String          @id @default(uuid())
+  name           String
+  dimensions     String
+  isActive       Boolean         @default(true)
+  formulation    Formulation?
+  batches        ProductionBatch[]
+  orderLines     OrderLine[]
+  yardStock      YardStock?
+  stockMovements StockMovement[]
+}
+
+model Formulation {
+  id                  String    @id @default(uuid())
+  blockTypeId         String    @unique
+  blockType           BlockType @relation(fields: [blockTypeId], references: [id])
+  cementKgPerBlock    Float
+  sandKgPerBlock      Float
+  additiveKgPerBlock  Float
+  isActive            Boolean   @default(true)
+
+  @@index([blockTypeId])
+}
+
+model Supplier {
+  id          String                @id @default(uuid())
+  name        String
+  cif         String                @unique
+  contactInfo String
+  purchases   RawMaterialPurchase[]
+}
+
+model RawMaterial {
+  id               String                @id @default(uuid())
+  name             String
+  unit             String
+  currentStock     Float                 @default(0)
+  minStockAlert    Float                 @default(0)
+  averageUnitPrice Float                 @default(0)
+  purchases        RawMaterialPurchase[]
+}
+
+model RawMaterialPurchase {
+  id            String      @id @default(uuid())
+  supplierId    String
+  supplier      Supplier    @relation(fields: [supplierId], references: [id])
+  materialId    String
+  material      RawMaterial @relation(fields: [materialId], references: [id])
+  date          DateTime    @default(now())
+  invoiceNumber String
+  quantity      Float
+  unitPrice     Float
+  totalPrice    Float
+
+  @@index([supplierId])
+  @@index([materialId])
+  @@index([date])
+}
+
+model ProductionBatch {
+  id                 String        @id @default(uuid())
+  code               String        @unique
+  date               DateTime      @default(now())
+  shift              String
+  blockTypeId        String
+  blockType          BlockType     @relation(fields: [blockTypeId], references: [id])
+  totalBlocksProduced Int
+  costCement         Float
+  costSand           Float
+  costAdditive       Float
+  totalCost          Float
+  unitCostPerBlock   Float
+  createdById        String
+  createdBy          User          @relation(fields: [createdById], references: [id])
+  batchWorkers       BatchWorker[]
+}
+
+model BatchWorker {
+  id             String          @id @default(uuid())
+  batchId        String
+  batch          ProductionBatch @relation(fields: [batchId], references: [id])
+  workerId       String
+  worker         Worker          @relation(fields: [workerId], references: [id])
+  blocksProduced Int
+}
+
+model Client {
+  id           String  @id @default(uuid())
+  name         String
+  cif          String  @unique
+  address      String
+  phone        String
+  commercialId String
+  commercial   User    @relation(fields: [commercialId], references: [id])
+  orders       Order[]
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  code        String      @unique
+  clientId    String
+  client      Client      @relation(fields: [clientId], references: [id])
+  date        DateTime    @default(now())
+  status      String      @default("PENDIENTE")
+  totalAmount Float       @default(0)
+  createdById String
+  createdBy   User        @relation(fields: [createdById], references: [id])
+  orderLines  OrderLine[]
+  dispatch    Dispatch?
+}
+
+model OrderLine {
+  id          String    @id @default(uuid())
+  orderId     String
+  order       Order     @relation(fields: [orderId], references: [id])
+  blockTypeId String
+  blockType   BlockType @relation(fields: [blockTypeId], references: [id])
+  quantity    Int
+  unitPrice   Float
+  totalPrice  Float
+}
+
+model Dispatch {
+  id                    String          @id @default(uuid())
+  orderId               String          @unique
+  order                 Order           @relation(fields: [orderId], references: [id])
+  dispatchDate          DateTime        @default(now())
+  dispatchedByWorkerId  String
+  dispatchedByWorker    Worker          @relation(fields: [dispatchedByWorkerId], references: [id])
+  totalBlocksDispatched Int
+  weighingTicket        WeighingTicket?
+}
+
+model WeighingTicket {
+  id            String   @id @default(uuid())
+  dispatchId    String   @unique
+  dispatch      Dispatch @relation(fields: [dispatchId], references: [id])
+  grossWeightKg Float
+  tareWeightKg  Float
+  netWeightKg   Float
+}
+
+model YardStock {
+  id              String    @id @default(uuid())
+  blockTypeId     String    @unique
+  blockType       BlockType @relation(fields: [blockTypeId], references: [id])
+  currentQuantity Int       @default(0)
+}
+
+model StockMovement {
+  id          String            @id @default(uuid())
+  blockTypeId String
+  blockType   BlockType         @relation(fields: [blockTypeId], references: [id])
+  type        String
+  quantity    Int
+  date        DateTime          @default(now())
+  referenceId String
+}
