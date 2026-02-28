@@ -209,6 +209,4 @@ El sistema cuenta con autenticación basada en sesiones mediante **NextAuth.js**
 
 **ERP Nexus** — Versión 1.0 MVP
 
-*Desarrollado con ❤️ en San Carlos, Chile*
-
 </div>
