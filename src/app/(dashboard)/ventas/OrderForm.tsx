@@ -28,7 +28,7 @@ export function OrderForm({ clients, blockTypes, userId }: { clients: any[], blo
     };
 
     const calculateTotal = () => {
-        return lines.reduce((acc, l) => acc + (l.quantity * l.unitPrice), 0).toFixed(2);
+        return lines.reduce((acc, l) => acc + (l.quantity * l.unitPrice), 0).toFixed(0);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -121,7 +121,7 @@ export function OrderForm({ clients, blockTypes, userId }: { clients: any[], blo
                                     />
                                 </div>
                                 <div className="w-32 space-y-1">
-                                    <Label className="text-xs text-slate-500">Precio Unit. ($)</Label>
+                                    <Label className="text-xs text-slate-500">Precio Unit. (CLP)</Label>
                                     <Input
                                         type="number" step="0.01" min="0" value={l.unitPrice || ''}
                                         onChange={e => updateLine(index, 'unitPrice', parseFloat(e.target.value) || 0)}
@@ -129,7 +129,7 @@ export function OrderForm({ clients, blockTypes, userId }: { clients: any[], blo
                                     />
                                 </div>
                                 <div className="w-24 pb-2 text-right text-sm font-medium text-slate-700">
-                                    ${(l.quantity * l.unitPrice).toFixed(2)}
+                                    CLP {(l.quantity * l.unitPrice).toFixed(0)}
                                 </div>
                                 <Button type="button" variant="ghost" size="icon" className="mb-0.5 text-red-500 hover:bg-red-50" onClick={() => removeLine(index)} disabled={lines.length === 1}>
                                     <Trash2 className="w-4 h-4" />
@@ -140,7 +140,7 @@ export function OrderForm({ clients, blockTypes, userId }: { clients: any[], blo
 
                     <div className="flex justify-between items-center pt-2">
                         <div className="text-slate-500 text-sm">Total a facturar:</div>
-                        <div className="text-2xl font-bold text-slate-900">${calculateTotal()}</div>
+                        <div className="text-2xl font-bold text-slate-900">CLP {calculateTotal()}</div>
                     </div>
 
                     <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">

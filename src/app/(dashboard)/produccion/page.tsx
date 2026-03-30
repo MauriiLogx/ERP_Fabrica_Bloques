@@ -62,9 +62,9 @@ export default async function ProduccionPage() {
                                         <td className="px-6 py-4">{batch.blockType.name}</td>
                                         <td className="px-6 py-4 text-right font-semibold text-slate-700">{batch.totalBlocksProduced} unds.</td>
                                         <td className="px-6 py-4 text-right">
-                                            ${batch.totalCost.toFixed(2)}
+                                            CLP {batch.totalCost.toFixed(0)}
                                             <div className="text-xs text-muted-foreground mt-0.5">
-                                                ${batch.unitCostPerBlock.toFixed(4)} c/u
+                                                CLP {batch.unitCostPerBlock.toFixed(0)} c/u
                                             </div>
                                         </td>
                                     </tr>

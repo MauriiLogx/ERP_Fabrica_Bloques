@@ -57,9 +57,9 @@ export default async function ComprasPage() {
                                             {purchase.quantity} <span className="text-muted-foreground text-xs">{purchase.material.unit}</span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            ${purchase.totalPrice.toFixed(2)}
+                                            CLP {purchase.totalPrice.toFixed(0)}
                                             <div className="text-xs text-muted-foreground mt-0.5">
-                                                ${purchase.unitPrice.toFixed(4)} c/u
+                                                CLP {purchase.unitPrice.toFixed(0)} c/u
                                             </div>
                                         </td>
                                     </tr>

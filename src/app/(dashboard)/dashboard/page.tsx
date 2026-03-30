@@ -27,7 +27,7 @@ export default async function DashboardPage() {
                         <CardTitle className="text-sm font-medium text-slate-500">Ventas (30d)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">${kpis.salesLast30Days.toFixed(2)}</div>
+                        <div className="text-2xl font-bold text-slate-900">CLP {kpis.salesLast30Days.toFixed(0)}</div>
                     </CardContent>
                 </Card>
 
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
                         <CardTitle className="text-sm font-medium text-slate-500">Coste Prod. (30d)</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">${kpis.productionCostLast30Days.toFixed(2)}</div>
+                        <div className="text-2xl font-bold text-slate-900">CLP {kpis.productionCostLast30Days.toFixed(0)}</div>
                     </CardContent>
                 </Card>
 

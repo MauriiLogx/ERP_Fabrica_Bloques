@@ -109,13 +109,13 @@ export function CompraForm({ suppliers, materials }: { suppliers: any[], materia
                             <Input type="number" step="0.01" value={quantity} onChange={e => setQuantity(e.target.value)} required placeholder="0.00" className="border-slate-300" />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-slate-600">Precio Unitario ($)</Label>
+                            <Label className="text-slate-600">Precio Unitario (CLP)</Label>
                             <Input type="number" step="0.0001" value={unitPrice} onChange={e => setUnitPrice(e.target.value)} required placeholder="0.0000" className="border-slate-300" />
                         </div>
                     </div>
 
                     <div className="bg-blue-50/50 p-3 rounded-md text-sm text-slate-700 font-medium text-right border border-blue-100">
-                        Total estimado: ${(Number(quantity) * Number(unitPrice)).toFixed(2)}
+                        Total estimado: CLP {(Number(quantity) * Number(unitPrice)).toFixed(0)}
                     </div>
 
                     <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">

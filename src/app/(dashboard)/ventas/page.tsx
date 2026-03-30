@@ -77,7 +77,7 @@ export default async function VentasPage() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-right font-semibold text-slate-900">
-                                            ${order.totalAmount.toFixed(2)}
+                                            CLP {order.totalAmount.toFixed(0)}
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             {order.status === 'PENDIENTE' || order.status === 'PREPARADO' ? (
