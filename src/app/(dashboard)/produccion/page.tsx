@@ -40,13 +40,12 @@ export default async function ProduccionPage() {
                                     <th className="px-6 py-4">Fecha / Turno</th>
                                     <th className="px-6 py-4">Bloque</th>
                                     <th className="px-6 py-4 text-right">Cantidad</th>
-                                    <th className="px-6 py-4 text-right">Coste Total / Un.</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {batches.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                                        <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
                                             No hay lotes registrados aún.
                                         </td>
                                     </tr>
@@ -60,13 +59,7 @@ export default async function ProduccionPage() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">{batch.blockType.name}</td>
-                                        <td className="px-6 py-4 text-right font-semibold text-slate-700">{batch.totalBlocksProduced} unds.</td>
-                                        <td className="px-6 py-4 text-right">
-                                            CLP {batch.totalCost.toFixed(0)}
-                                            <div className="text-xs text-muted-foreground mt-0.5">
-                                                CLP {batch.unitCostPerBlock.toFixed(0)} c/u
-                                            </div>
-                                        </td>
+                                        <td className="px-6 py-4 text-right font-bold text-slate-800 text-lg">{batch.totalBlocksProduced} unds.</td>
                                     </tr>
                                 ))}
                             </tbody>

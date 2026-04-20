@@ -40,58 +40,10 @@ model BlockType {
   name           String
   dimensions     String
   isActive       Boolean         @default(true)
-  formulation    Formulation?
   batches        ProductionBatch[]
   orderLines     OrderLine[]
   yardStock      YardStock?
   stockMovements StockMovement[]
-}
-
-model Formulation {
-  id                  String    @id @default(uuid())
-  blockTypeId         String    @unique
-  blockType           BlockType @relation(fields: [blockTypeId], references: [id])
-  cementKgPerBlock    Float
-  sandKgPerBlock      Float
-  additiveKgPerBlock  Float
-  isActive            Boolean   @default(true)
-
-  @@index([blockTypeId])
-}
-
-model Supplier {
-  id          String                @id @default(uuid())
-  name        String
-  cif         String                @unique
-  contactInfo String
-  purchases   RawMaterialPurchase[]
-}
-
-model RawMaterial {
-  id               String                @id @default(uuid())
-  name             String
-  unit             String
-  currentStock     Float                 @default(0)
-  minStockAlert    Float                 @default(0)
-  averageUnitPrice Float                 @default(0)
-  purchases        RawMaterialPurchase[]
-}
-
-model RawMaterialPurchase {
-  id            String      @id @default(uuid())
-  supplierId    String
-  supplier      Supplier    @relation(fields: [supplierId], references: [id])
-  materialId    String
-  material      RawMaterial @relation(fields: [materialId], references: [id])
-  date          DateTime    @default(now())
-  invoiceNumber String
-  quantity      Float
-  unitPrice     Float
-  totalPrice    Float
-
-  @@index([supplierId])
-  @@index([materialId])
-  @@index([date])
 }
 
 model ProductionBatch {
@@ -102,11 +54,6 @@ model ProductionBatch {
   blockTypeId        String
   blockType          BlockType     @relation(fields: [blockTypeId], references: [id])
   totalBlocksProduced Int
-  costCement         Float
-  costSand           Float
-  costAdditive       Float
-  totalCost          Float
-  unitCostPerBlock   Float
   createdById        String
   createdBy          User          @relation(fields: [createdById], references: [id])
   batchWorkers       BatchWorker[]
@@ -133,17 +80,18 @@ model Client {
 }
 
 model Order {
-  id          String      @id @default(uuid())
-  code        String      @unique
-  clientId    String
-  client      Client      @relation(fields: [clientId], references: [id])
-  date        DateTime    @default(now())
-  status      String      @default("PENDIENTE")
-  totalAmount Float       @default(0)
-  createdById String
-  createdBy   User        @relation(fields: [createdById], references: [id])
-  orderLines  OrderLine[]
-  dispatch    Dispatch?
+  id            String      @id @default(uuid())
+  code          String      @unique
+  clientId      String
+  client        Client      @relation(fields: [clientId], references: [id])
+  date          DateTime    @default(now())
+  status        String      @default("PENDIENTE") // PENDIENTE, ENTREGADO, etc.
+  paymentStatus String      @default("PENDIENTE") // PENDIENTE, PAGADO
+  totalAmount   Float       @default(0)
+  createdById   String
+  createdBy     User        @relation(fields: [createdById], references: [id])
+  orderLines    OrderLine[]
+  dispatch      Dispatch?
 }
 
 model OrderLine {

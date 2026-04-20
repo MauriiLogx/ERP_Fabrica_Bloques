@@ -1,180 +1,174 @@
 import { getDashboardStats } from "@/app/actions/dashboard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import {
-    Users, Factory, ShoppingCart, Truck,
-    TrendingUp, TrendingDown, AlertTriangle
+    Package, Factory, Truck, Plus
 } from "lucide-react";
+import Link from "next/link";
 
 export default async function DashboardPage() {
-    const { kpis, recentMovements, lowStockMaterials } = await getDashboardStats();
+    const { kpis, pendingOrdersList, recentMovements } = await getDashboardStats();
 
     return (
-        <div className="space-y-6 max-w-7xl mx-auto">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Panel de Control</h1>
-                <p className="text-muted-foreground mt-1">Resumen general de operaciones (Últimos 30 días)</p>
-            </div>
-
-            {/* Primary KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card className="border-slate-100 shadow-md relative overflow-hidden group bg-gradient-to-br from-white to-slate-50">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Truck className="w-20 h-20 text-primary" />
-                    </div>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500">Ventas (30d)</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">CLP {kpis.salesLast30Days.toFixed(0)}</div>
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-100 shadow-md relative overflow-hidden group bg-gradient-to-br from-white to-slate-50">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Factory className="w-20 h-20 text-secondary" />
-                    </div>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500">Coste Prod. (30d)</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">CLP {kpis.productionCostLast30Days.toFixed(0)}</div>
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-100 shadow-md relative overflow-hidden group bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <TrendingUp className="w-20 h-20 text-primary" />
-                    </div>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-semibold text-primary/80">Bloques Producidos</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-3xl font-black text-primary">{kpis.blocksProducedLast30Days}</div>
-                    </CardContent>
-                </Card>
-
-                <Card className="border-slate-100 shadow-md relative overflow-hidden group bg-gradient-to-br from-white to-slate-50">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Users className="w-20 h-20 text-slate-400" />
-                    </div>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-slate-500">Operarios Activos</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-slate-900">{kpis.activeWorkers}</div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                {/* Alerts Column */}
-                <div className="space-y-6">
-                    <Card className="border-red-200 shadow-sm">
-                        <CardHeader className="bg-red-50 border-b border-red-100 pb-3 flex flex-row items-center justify-between">
-                            <CardTitle className="text-sm font-semibold text-red-900">Alertas de Stock (Materia Prima)</CardTitle>
-                            <AlertTriangle className="w-4 h-4 text-red-600" />
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            {lowStockMaterials.length === 0 ? (
-                                <div className="p-4 text-sm text-green-700 bg-green-50/50">
-                                    Todo el inventario está por encima del nivel mínimo.
-                                </div>
-                            ) : (
-                                <ul className="divide-y divide-red-100">
-                                    {lowStockMaterials.map(mat => (
-                                        <li key={mat.id} className="p-4 flex justify-between items-center bg-white hover:bg-neutral-50 transition-colors">
-                                            <div>
-                                                <p className="font-medium text-slate-900 text-sm">{mat.name}</p>
-                                                <p className="text-xs text-red-600 mt-0.5">Mínimo: {mat.minStockAlert} {mat.unit}</p>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-bold text-red-700 ring-1 ring-inset ring-red-600/10">
-                                                    {mat.currentStock} {mat.unit}
-                                                </span>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    <Card className="border-slate-200 shadow-sm">
-                        <CardHeader className="bg-slate-50 border-b pb-3 relative overflow-hidden">
-                            <div className="absolute right-[-10px] top-[-10px] opacity-10"><ShoppingCart className="w-16 h-16" /></div>
-                            <CardTitle className="text-sm font-semibold text-slate-800">Cifras Base</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 space-y-3">
-                            <div className="flex justify-between items-center border-b pb-2">
-                                <span className="text-sm text-slate-600">Stock Total en Patio (Unds)</span>
-                                <span className="font-bold text-slate-900">{kpis.totalBlocksInYard}</span>
-                            </div>
-                            <div className="flex justify-between items-center border-b pb-2">
-                                <span className="text-sm text-slate-600">Cartera de Clientes</span>
-                                <span className="font-bold text-slate-900">{kpis.totalClients}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-slate-600">Tipos de Molde (Bloques)</span>
-                                <span className="font-bold text-slate-900">{kpis.activeBlockTypes}</span>
-                            </div>
-                        </CardContent>
-                    </Card>
+        <div className="space-y-8 max-w-7xl mx-auto">
+            {/* Header with Quick Actions */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Resumen Operativo</h1>
+                    <p className="text-slate-500 mt-1 text-lg">Estado de patio y entregas</p>
                 </div>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <Link
+                        href="/produccion?action=new"
+                        className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-slate-300 rounded-lg shadow-sm text-slate-700 font-bold hover:bg-slate-50 transition-colors text-lg"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Registrar Producción
+                    </Link>
+                    <Link
+                        href="/ventas?action=new"
+                        className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 rounded-lg shadow-sm text-white font-bold hover:bg-blue-700 transition-colors text-lg"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Nueva Venta
+                    </Link>
+                </div>
+            </div>
 
-                {/* Recent Activity Column */}
-                <div className="lg:col-span-2">
-                    <Card className="border-slate-200 shadow-md h-full relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
-                            <TrendingDown className="w-48 h-48" />
+            {/* Primary KPIs Layer */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className="text-slate-500 font-semibold mb-1 text-lg">Stock Total en Patio</p>
+                            <h3 className="text-5xl font-black text-slate-900 mt-2">{kpis.totalBlocksInYard}</h3>
+                            <p className="text-sm text-green-600 font-bold mt-3">Unidades disponibles para venta</p>
                         </div>
-                        <CardHeader className="bg-white border-b pb-4">
-                            <CardTitle className="text-lg text-slate-800 font-bold">Últimos Movimientos de Patio</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="overflow-x-auto relative z-10">
-                                <table className="w-full text-sm text-left">
-                                    <thead className="bg-slate-50/50 text-slate-500 font-medium border-b border-slate-100">
-                                        <tr>
-                                            <th className="px-6 py-3">Fecha</th>
-                                            <th className="px-6 py-3">Bloque</th>
-                                            <th className="px-6 py-3">Operación</th>
-                                            <th className="px-6 py-3 text-right">Cant.</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-100">
-                                        {recentMovements.length === 0 ? (
-                                            <tr>
-                                                <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
-                                                    No hay actividad reciente.
-                                                </td>
-                                            </tr>
-                                        ) : recentMovements.map((mov) => (
-                                            <tr key={mov.id} className="hover:bg-primary/5 transition-colors group bg-white">
-                                                <td className="px-6 py-4 text-slate-500 whitespace-nowrap text-xs">
-                                                    {format(mov.date, "dd MMM HH:mm", { locale: es })}
-                                                </td>
-                                                <td className="px-6 py-4 font-semibold text-slate-800">{mov.blockType.name}</td>
-                                                <td className="px-6 py-4">
-                                                    {mov.type === 'IN_PRODUCTION' ? <span className="text-primary font-bold text-xs bg-primary/10 px-2 py-1 rounded-md">PRODUCCIÓN</span> : ''}
-                                                    {mov.type === 'OUT_DISPATCH' ? <span className="text-blue-600 font-bold text-xs bg-blue-50 px-2 py-1 rounded-md">DESPACHO</span> : ''}
-                                                    {mov.type === 'ADJUSTMENT' ? <span className="text-orange-600 font-bold text-xs bg-orange-50 px-2 py-1 rounded-md">AJUSTE MANUAL</span> : ''}
-                                                    <div className="text-[10px] text-slate-400 font-mono mt-1.5 opacity-70 group-hover:opacity-100 transition-opacity">{mov.referenceId}</div>
-                                                </td>
-                                                <td className={`px-6 py-4 text-right font-black text-base ${mov.quantity > 0 ? 'text-primary' : 'text-blue-600'}`}>
-                                                    {mov.quantity > 0 ? '+' : ''}{mov.quantity}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </CardContent>
-                    </Card>
+                        <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
+                            <Package className="w-8 h-8 text-green-700" />
+                        </div>
+                    </div>
                 </div>
 
+                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className="text-slate-500 font-semibold mb-1 text-lg">Producción Semanal</p>
+                            <h3 className="text-5xl font-black text-slate-900 mt-2">{kpis.blocksProducedThisWeek}</h3>
+                            <p className="text-sm text-slate-500 font-bold mt-3">Hoy: <span className="text-blue-700">{kpis.blocksProducedToday}</span> bloques elaborados</p>
+                        </div>
+                        <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                            <Factory className="w-8 h-8 text-blue-700" />
+                        </div>
+                    </div>
+                </div>
+
+                <div className={`bg-white border rounded-xl p-6 shadow-sm ${kpis.pendingOrders > 0 ? 'border-orange-200' : 'border-slate-200'}`}>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className={`${kpis.pendingOrders > 0 ? 'text-orange-700' : 'text-slate-500'} font-semibold mb-1 text-lg`}>Pedidos Pendientes</p>
+                            <h3 className={`text-5xl font-black mt-2 ${kpis.pendingOrders > 0 ? 'text-orange-600' : 'text-slate-900'}`}>{kpis.pendingOrders}</h3>
+                            <p className="text-sm text-slate-500 font-bold mt-3">Pendientes por entregar/despachar</p>
+                        </div>
+                        <div className={`w-14 h-14 rounded-lg flex items-center justify-center shrink-0 ${kpis.pendingOrders > 0 ? 'bg-orange-100' : 'bg-slate-100'}`}>
+                            <Truck className={`w-8 h-8 ${kpis.pendingOrders > 0 ? 'text-orange-600' : 'text-slate-500'}`} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* List Layer */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Pending Orders (Despachos) */}
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
+                    <div className="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h2 className="text-xl font-bold text-slate-900">Próximos Despachos</h2>
+                    </div>
+                    <div className="flex-1 p-0 overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead className="bg-white text-slate-500 text-sm font-semibold">
+                                <tr>
+                                    <th className="px-6 py-4 border-b border-slate-100">Cliente</th>
+                                    <th className="px-6 py-4 border-b border-slate-100">Cant. Bloques</th>
+                                    <th className="px-6 py-4 border-b border-slate-100 text-right">Pedido El</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 bg-white">
+                                {pendingOrdersList.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={3} className="px-6 py-12 text-center text-slate-500 font-medium text-lg">
+                                            No hay despachos pendientes. ¡Todo al día!
+                                        </td>
+                                    </tr>
+                                ) : pendingOrdersList.map(order => {
+                                    const totalBlocks = order.orderLines.reduce((acc, line) => acc + line.quantity, 0);
+                                    return (
+                                        <tr key={order.id} className="hover:bg-slate-50 transition-colors">
+                                            <td className="px-6 py-6">
+                                                <div className="font-bold text-slate-900 text-lg">{order.client.name}</div>
+                                                <div className="text-sm text-slate-500 font-medium mt-1">Ref: {order.code}</div>
+                                            </td>
+                                            <td className="px-6 py-6">
+                                                <span className="font-black text-slate-800 text-xl">{totalBlocks}</span>
+                                            </td>
+                                            <td className="px-6 py-6 text-right text-base font-semibold text-slate-600">
+                                                {format(order.date, "dd MMM", { locale: es })}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Movimientos Recientes */}
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
+                    <div className="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h2 className="text-xl font-bold text-slate-900">Últimos Movimientos</h2>
+                    </div>
+                    <div className="flex-1 p-0 overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead className="bg-white text-slate-500 text-sm font-semibold">
+                                <tr>
+                                    <th className="px-6 py-4 border-b border-slate-100">Fecha</th>
+                                    <th className="px-6 py-4 border-b border-slate-100">Tipo</th>
+                                    <th className="px-6 py-4 border-b border-slate-100 text-right">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 bg-white">
+                                {recentMovements.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={3} className="px-6 py-12 text-center text-slate-500 font-medium text-lg">
+                                            Sin movimientos recientes.
+                                        </td>
+                                    </tr>
+                                ) : recentMovements.map(mov => (
+                                    <tr key={mov.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-6 py-6 text-base font-semibold text-slate-600">
+                                            {format(mov.date, "dd/MM HH:mm")}
+                                        </td>
+                                        <td className="px-6 py-6">
+                                            <span className={`inline-flex items-center px-3 py-1 rounded-md text-xs font-black tracking-wide ${
+                                                mov.type === 'IN_PRODUCTION' ? 'bg-blue-50 text-blue-700' :
+                                                mov.type === 'OUT_DISPATCH' ? 'bg-orange-50 text-orange-700' :
+                                                'bg-slate-100 text-slate-700'
+                                            }`}>
+                                                {mov.type === 'IN_PRODUCTION' ? 'PRODUCCIÓN' : mov.type === 'OUT_DISPATCH' ? 'DESPACHO' : 'AJUSTE'}
+                                            </span>
+                                            <div className="text-base font-bold text-slate-900 mt-2">{mov.blockType.name}</div>
+                                        </td>
+                                        <td className={`px-6 py-6 text-right font-black text-2xl ${
+                                            mov.quantity > 0 ? 'text-green-600' : 'text-slate-900'
+                                        }`}>
+                                            {mov.quantity > 0 ? '+' : ''}{mov.quantity}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );
